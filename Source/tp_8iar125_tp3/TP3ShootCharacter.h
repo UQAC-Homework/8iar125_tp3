@@ -6,8 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TP3ShootCharacter.generated.h"
 
-UCLASS(config=Game)
-class ATP3ShootCharacter : public ACharacter
+UCLASS()
+class TP_8IAR125_TP3_API ATP3ShootCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -19,7 +19,6 @@ class ATP3ShootCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-
 public:
 	ATP3ShootCharacter();
 
@@ -28,7 +27,6 @@ public:
 	float TurnRateGamepad;
 
 protected:
-
 	// Add a gun skeletal mesh component
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	class USkeletalMeshComponent* SK_Gun;
@@ -86,7 +84,6 @@ protected:
 
 	void FireParticle(FVector Start, FVector Impact);
 
-protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
@@ -97,8 +94,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-public:
-
 	// Is Aiming
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Aiming")
 	bool IsAiming;
@@ -106,6 +101,4 @@ public:
 	// Is Firing
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Firing")
 	bool IsFiring;
-
 };
-

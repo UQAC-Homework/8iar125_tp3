@@ -11,7 +11,6 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
-
 //////////////////////////////////////////////////////////////////////////
 // ATP3ShootCharacter
 
@@ -48,7 +47,8 @@ ATP3ShootCharacter::ATP3ShootCharacter()
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Create SK_Gun
@@ -124,15 +124,14 @@ void ATP3ShootCharacter::Fire()
 
 	if (IsAiming)
 	{
-
 		Start = FollowCamera->GetComponentLocation();
 
 		ForwardVector = FollowCamera->GetForwardVector();
 
 		LineTraceEnd = Start + (ForwardVector * 10000);
 	}
-	else {
-
+	else
+	{
 		// Get muzzle location
 		Start = SK_Gun->GetSocketLocation("MuzzleFlash");
 
@@ -144,22 +143,19 @@ void ATP3ShootCharacter::Fire()
 	}
 }
 
-
-
 void ATP3ShootCharacter::BoostSpeed()
 {
 	// Set Max walking speed to 800
 	GetCharacterMovement()->MaxWalkSpeed = 800.f;
 
 	GetWorld()->GetTimerManager().SetTimer(BoostSpeedTimer, [&]()
-		{
-			// Set Max walking speed to 500
-			GetCharacterMovement()->MaxWalkSpeed = 500.f;
-			
-			// Clear existing timer boost speed
-			GetWorldTimerManager().ClearTimer(BoostSpeedTimer);
+	{
+		// Set Max walking speed to 500
+		GetCharacterMovement()->MaxWalkSpeed = 500.f;
 
-		}, 4, false);
+		// Clear existing timer boost speed
+		GetWorldTimerManager().ClearTimer(BoostSpeedTimer);
+	}, 4, false);
 }
 
 void ATP3ShootCharacter::RemoveSpeedBoost()
@@ -168,10 +164,12 @@ void ATP3ShootCharacter::RemoveSpeedBoost()
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 }
 
-
 void ATP3ShootCharacter::FireParticle(FVector Start, FVector Impact)
 {
-	if (!ParticleStart || !ParticleImpact) return;
+	if (!ParticleStart || !ParticleImpact)
+	{
+		return;
+	}
 
 	FTransform ParticleT;
 
@@ -185,7 +183,6 @@ void ATP3ShootCharacter::FireParticle(FVector Start, FVector Impact)
 	ParticleT.SetLocation(Impact);
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleImpact, ParticleT, true);
-
 }
 
 void ATP3ShootCharacter::TurnAtRate(float Rate)
@@ -216,12 +213,12 @@ void ATP3ShootCharacter::MoveForward(float Value)
 
 void ATP3ShootCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) )
+	if ((Controller != nullptr) && (Value != 0.0f))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
+
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction

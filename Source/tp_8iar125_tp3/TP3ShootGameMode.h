@@ -6,14 +6,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "TP3ShootGameMode.generated.h"
 
-UCLASS(minimalapi)
-class ATP3ShootGameMode : public AGameModeBase
+UCLASS()
+class TP_8IAR125_TP3_API ATP3ShootGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
 	ATP3ShootGameMode();
 };
-
-
-

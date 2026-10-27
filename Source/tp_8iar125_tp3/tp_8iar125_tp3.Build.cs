@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class TP3Shoot : ModuleRules
+public class tp_8iar125_tp3 : ModuleRules
 {
-	public TP3Shoot(ReadOnlyTargetRules Target) : base(Target)
+	public tp_8iar125_tp3(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
