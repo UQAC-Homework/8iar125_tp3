@@ -28,7 +28,6 @@ AShooterCharacter::AShooterCharacter()
 
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
 	// instead of recompiling to adjust them
-	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
@@ -59,12 +58,10 @@ AShooterCharacter::AShooterCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AShooterCharacter::MoveRight);
@@ -77,10 +74,6 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &AShooterCharacter::LookUpAtRate);
 
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &AShooterCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &AShooterCharacter::TouchStopped);
-
 	// Aiming 
 	PlayerInputComponent->BindAction("Aiming", IE_Pressed, this, &AShooterCharacter::Aim);
 	PlayerInputComponent->BindAction("Aiming", IE_Released, this, &AShooterCharacter::StopAiming);
@@ -91,16 +84,6 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	// Boost Speed
 	PlayerInputComponent->BindAction("BoostSpeed", IE_Pressed, this, &AShooterCharacter::BoostSpeed);
 	PlayerInputComponent->BindAction("BoostSpeed", IE_Released, this, &AShooterCharacter::RemoveSpeedBoost);
-}
-
-void AShooterCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-	Jump();
-}
-
-void AShooterCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-	StopJumping();
 }
 
 void AShooterCharacter::Aim()
