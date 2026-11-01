@@ -1,13 +1,11 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "TP3ShootCharacter.generated.h"
+#include "ShooterCharacter.generated.h"
 
 UCLASS()
-class TP_8IAR125_TP3_API ATP3ShootCharacter : public ACharacter
+class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -20,7 +18,7 @@ class TP_8IAR125_TP3_API ATP3ShootCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 
 public:
-	ATP3ShootCharacter();
+	AShooterCharacter();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Input)

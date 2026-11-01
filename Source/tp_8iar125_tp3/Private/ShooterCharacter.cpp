@@ -1,6 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
-#include "TP3ShootCharacter.h"
+#include "tp_8iar125_tp3/Public/ShooterCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -11,10 +9,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
-//////////////////////////////////////////////////////////////////////////
-// ATP3ShootCharacter
-
-ATP3ShootCharacter::ATP3ShootCharacter()
+AShooterCharacter::AShooterCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -64,61 +59,61 @@ ATP3ShootCharacter::ATP3ShootCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void ATP3ShootCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &ATP3ShootCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("Move Right / Left", this, &ATP3ShootCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AShooterCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("Move Right / Left", this, &AShooterCharacter::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("Turn Right / Left Gamepad", this, &ATP3ShootCharacter::TurnAtRate);
+	PlayerInputComponent->BindAxis("Turn Right / Left Gamepad", this, &AShooterCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &ATP3ShootCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &AShooterCharacter::LookUpAtRate);
 
 	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &ATP3ShootCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &ATP3ShootCharacter::TouchStopped);
+	PlayerInputComponent->BindTouch(IE_Pressed, this, &AShooterCharacter::TouchStarted);
+	PlayerInputComponent->BindTouch(IE_Released, this, &AShooterCharacter::TouchStopped);
 
 	// Aiming 
-	PlayerInputComponent->BindAction("Aiming", IE_Pressed, this, &ATP3ShootCharacter::Aim);
-	PlayerInputComponent->BindAction("Aiming", IE_Released, this, &ATP3ShootCharacter::StopAiming);
+	PlayerInputComponent->BindAction("Aiming", IE_Pressed, this, &AShooterCharacter::Aim);
+	PlayerInputComponent->BindAction("Aiming", IE_Released, this, &AShooterCharacter::StopAiming);
 
 	// Fire
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATP3ShootCharacter::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AShooterCharacter::Fire);
 
 	// Boost Speed
-	PlayerInputComponent->BindAction("BoostSpeed", IE_Pressed, this, &ATP3ShootCharacter::BoostSpeed);
-	PlayerInputComponent->BindAction("BoostSpeed", IE_Released, this, &ATP3ShootCharacter::RemoveSpeedBoost);
+	PlayerInputComponent->BindAction("BoostSpeed", IE_Pressed, this, &AShooterCharacter::BoostSpeed);
+	PlayerInputComponent->BindAction("BoostSpeed", IE_Released, this, &AShooterCharacter::RemoveSpeedBoost);
 }
 
-void ATP3ShootCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
+void AShooterCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	Jump();
 }
 
-void ATP3ShootCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
+void AShooterCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	StopJumping();
 }
 
-void ATP3ShootCharacter::Aim()
+void AShooterCharacter::Aim()
 {
 	IsAiming = true;
 }
 
-void ATP3ShootCharacter::StopAiming()
+void AShooterCharacter::StopAiming()
 {
 	IsAiming = false;
 }
 
-void ATP3ShootCharacter::Fire()
+void AShooterCharacter::Fire()
 {
 	FVector Start, LineTraceEnd, ForwardVector;
 
@@ -143,7 +138,7 @@ void ATP3ShootCharacter::Fire()
 	}
 }
 
-void ATP3ShootCharacter::BoostSpeed()
+void AShooterCharacter::BoostSpeed()
 {
 	// Set Max walking speed to 800
 	GetCharacterMovement()->MaxWalkSpeed = 800.f;
@@ -158,13 +153,13 @@ void ATP3ShootCharacter::BoostSpeed()
 	}, 4, false);
 }
 
-void ATP3ShootCharacter::RemoveSpeedBoost()
+void AShooterCharacter::RemoveSpeedBoost()
 {
 	// Set Max walking speed to 500
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 }
 
-void ATP3ShootCharacter::FireParticle(FVector Start, FVector Impact)
+void AShooterCharacter::FireParticle(FVector Start, FVector Impact)
 {
 	if (!ParticleStart || !ParticleImpact)
 	{
@@ -185,19 +180,19 @@ void ATP3ShootCharacter::FireParticle(FVector Start, FVector Impact)
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleImpact, ParticleT, true);
 }
 
-void ATP3ShootCharacter::TurnAtRate(float Rate)
+void AShooterCharacter::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
 }
 
-void ATP3ShootCharacter::LookUpAtRate(float Rate)
+void AShooterCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
 }
 
-void ATP3ShootCharacter::MoveForward(float Value)
+void AShooterCharacter::MoveForward(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
@@ -211,7 +206,7 @@ void ATP3ShootCharacter::MoveForward(float Value)
 	}
 }
 
-void ATP3ShootCharacter::MoveRight(float Value)
+void AShooterCharacter::MoveRight(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
