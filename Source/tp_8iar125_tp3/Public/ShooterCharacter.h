@@ -68,7 +68,8 @@ protected:
 	// Firing function
 	void Fire();
 
-	void FireParticle(const FVector& Impact) const;
+	/// Spawns an impact particle at the given location
+	void SpawnImpactParticle(const FVector& Location) const;
 
 public:
 	/** Returns CameraBoom subobject **/

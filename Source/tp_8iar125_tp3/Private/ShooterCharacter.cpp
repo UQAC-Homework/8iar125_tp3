@@ -4,9 +4,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "Components/TimelineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 AShooterCharacter::AShooterCharacter()
@@ -95,26 +93,15 @@ void AShooterCharacter::StopAiming()
 // ReSharper disable once CppMemberFunctionMayBeConst
 void AShooterCharacter::Fire()
 {
-	FVector Start, ForwardVector;
-
-	if (IsAiming)
-	{
-		Start = FollowCamera->GetComponentLocation();
-
-		ForwardVector = FollowCamera->GetForwardVector();
-	}
-	else
-	{
-		// Get muzzle location
-		Start = SK_Gun->GetSocketLocation("MuzzleFlash");
-
-		// Get Rotation Forward Vector
-		ForwardVector = FollowCamera->GetForwardVector();
-	}
+	if (!IsAiming)
+		return;
 
 	const auto World = GetWorld();
 	check(World);
+	check(FollowCamera);
 
+	const auto Start = FollowCamera->GetComponentLocation();
+	const auto ForwardVector = FollowCamera->GetForwardVector();
 	const auto End = Start + ForwardVector * 10000;
 
 	FCollisionQueryParams Params = FCollisionQueryParams(
@@ -139,10 +126,10 @@ void AShooterCharacter::Fire()
 	if (!bHit || !Hit.bBlockingHit)
 		return;
 
-	FireParticle(Hit.ImpactPoint);
+	SpawnImpactParticle(Hit.ImpactPoint);
 }
 
-void AShooterCharacter::FireParticle(const FVector& Impact) const
+void AShooterCharacter::SpawnImpactParticle(const FVector& Location) const
 {
 	if (!ParticleImpact)
 		return;
@@ -152,7 +139,7 @@ void AShooterCharacter::FireParticle(const FVector& Impact) const
 
 	FTransform ParticleT;
 	ParticleT.SetScale3D(FVector(0.25, 0.25, 0.25));
-	ParticleT.SetLocation(Impact);
+	ParticleT.SetLocation(Location);
 
 	UGameplayStatics::SpawnEmitterAtLocation(World, ParticleImpact, ParticleT, true);
 }
