@@ -31,10 +31,6 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* SK_Gun;
 
-	// Particle Start
-	UPROPERTY(EditAnywhere, Category = Gameplay)
-	UParticleSystem* ParticleStart;
-
 	// Particle Impact
 	UPROPERTY(EditAnywhere, Category = Gameplay)
 	UParticleSystem* ParticleImpact;
@@ -72,11 +68,7 @@ protected:
 	// Firing function
 	void Fire();
 
-	void BoostSpeed();
-
-	void RemoveSpeedBoost();
-
-	void FireParticle(FVector Start, FVector Impact);
+	void FireParticle(const FVector& Impact) const;
 
 public:
 	/** Returns CameraBoom subobject **/

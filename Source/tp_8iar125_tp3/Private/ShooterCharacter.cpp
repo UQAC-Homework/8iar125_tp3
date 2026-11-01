@@ -80,10 +80,6 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	// Fire
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AShooterCharacter::Fire);
-
-	// Boost Speed
-	PlayerInputComponent->BindAction("BoostSpeed", IE_Pressed, this, &AShooterCharacter::BoostSpeed);
-	PlayerInputComponent->BindAction("BoostSpeed", IE_Released, this, &AShooterCharacter::RemoveSpeedBoost);
 }
 
 void AShooterCharacter::Aim()
@@ -96,17 +92,16 @@ void AShooterCharacter::StopAiming()
 	IsAiming = false;
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AShooterCharacter::Fire()
 {
-	FVector Start, LineTraceEnd, ForwardVector;
+	FVector Start, ForwardVector;
 
 	if (IsAiming)
 	{
 		Start = FollowCamera->GetComponentLocation();
 
 		ForwardVector = FollowCamera->GetForwardVector();
-
-		LineTraceEnd = Start + (ForwardVector * 10000);
 	}
 	else
 	{
@@ -115,91 +110,93 @@ void AShooterCharacter::Fire()
 
 		// Get Rotation Forward Vector
 		ForwardVector = FollowCamera->GetForwardVector();
-
-		// Get End Point
-		LineTraceEnd = Start + (ForwardVector * 10000);
 	}
-}
 
-void AShooterCharacter::BoostSpeed()
-{
-	// Set Max walking speed to 800
-	GetCharacterMovement()->MaxWalkSpeed = 800.f;
+	const auto World = GetWorld();
+	check(World);
 
-	GetWorld()->GetTimerManager().SetTimer(BoostSpeedTimer, [&]()
-	{
-		// Set Max walking speed to 500
-		GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	const auto End = Start + ForwardVector * 10000;
 
-		// Clear existing timer boost speed
-		GetWorldTimerManager().ClearTimer(BoostSpeedTimer);
-	}, 4, false);
-}
+	FCollisionQueryParams Params = FCollisionQueryParams(
+		FName(TEXT("FireTrace")),
+		true,
+		this
+	);
 
-void AShooterCharacter::RemoveSpeedBoost()
-{
-	// Set Max walking speed to 500
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-}
+	Params.bTraceComplex = true;
+	Params.bReturnPhysicalMaterial = false;
 
-void AShooterCharacter::FireParticle(FVector Start, FVector Impact)
-{
-	if (!ParticleStart || !ParticleImpact)
-	{
+	FHitResult Hit(ForceInit);
+
+	const auto bHit = World->LineTraceSingleByChannel(
+		Hit,
+		Start,
+		End,
+		ECC_WorldDynamic,
+		Params
+	);
+
+	if (!bHit || !Hit.bBlockingHit)
 		return;
-	}
+
+	FireParticle(Hit.ImpactPoint);
+}
+
+void AShooterCharacter::FireParticle(const FVector& Impact) const
+{
+	if (!ParticleImpact)
+		return;
+
+	const auto World = GetWorld();
+	check(World);
 
 	FTransform ParticleT;
-
-	ParticleT.SetLocation(Start);
-
 	ParticleT.SetScale3D(FVector(0.25, 0.25, 0.25));
-
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleStart, ParticleT, true);
-
-	// Spawn particle at impact point
 	ParticleT.SetLocation(Impact);
 
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleImpact, ParticleT, true);
+	UGameplayStatics::SpawnEmitterAtLocation(World, ParticleImpact, ParticleT, true);
 }
 
-void AShooterCharacter::TurnAtRate(float Rate)
+void AShooterCharacter::TurnAtRate(const float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
 }
 
-void AShooterCharacter::LookUpAtRate(float Rate)
+void AShooterCharacter::LookUpAtRate(const float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
 }
 
-void AShooterCharacter::MoveForward(float Value)
+void AShooterCharacter::MoveForward(const float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	if (Value == 0.0f)
+		return;
 
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-	}
+	check(Controller);
+
+	// find out which way is forward
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get forward vector
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(Direction, Value);
 }
 
-void AShooterCharacter::MoveRight(float Value)
+void AShooterCharacter::MoveRight(const float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
-	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	if (Value == 0.0f)
+		return;
 
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		AddMovementInput(Direction, Value);
-	}
+	check(Controller);
+
+	// find out which way is right
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get right vector 
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(Direction, Value);
 }
