@@ -1,7 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "ShooterCharacter.generated.h"
 
 UCLASS()
@@ -11,11 +13,11 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
+	UCameraComponent* FollowCamera;
 
 public:
 	AShooterCharacter();
@@ -27,19 +29,19 @@ public:
 protected:
 	// Add a gun skeletal mesh component
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	class USkeletalMeshComponent* SK_Gun;
+	USkeletalMeshComponent* SK_Gun;
 
 	// Particle Start
 	UPROPERTY(EditAnywhere, Category = Gameplay)
-	class UParticleSystem* ParticleStart;
+	UParticleSystem* ParticleStart;
 
 	// Particle Impact
 	UPROPERTY(EditAnywhere, Category = Gameplay)
-	class UParticleSystem* ParticleImpact;
+	UParticleSystem* ParticleImpact;
 
 	// Fire animation
 	UPROPERTY(EditAnywhere, Category = Gameplay)
-	class UAnimMontage* FireAnimation;
+	UAnimMontage* FireAnimation;
 
 	// Timer for Boost Speed
 	FTimerHandle BoostSpeedTimer;
@@ -82,15 +84,13 @@ protected:
 
 	void FireParticle(FVector Start, FVector Impact);
 
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// End of APawn interface
-
 public:
 	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// Is Aiming
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Aiming")
