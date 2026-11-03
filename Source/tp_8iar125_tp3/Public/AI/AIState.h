@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "AiState.generated.h"
+#include "AIState.generated.h"
 
 UENUM(BlueprintType)
-enum class EAiState : uint8
+enum class EAIState : uint8
 {
 	Attack = 0,
 	Cover = 1,

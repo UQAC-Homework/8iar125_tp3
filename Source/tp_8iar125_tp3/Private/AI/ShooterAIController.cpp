@@ -65,13 +65,13 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		{
 			// Set can see player to true
 			
-			BlackboardComponent->SetValueAsEnum("State",static_cast<uint8>(EAiState::Attack));
+			BlackboardComponent->SetValueAsEnum("State",static_cast<uint8>(EAIState::Attack));
 			BlackboardComponent->SetValueAsObject("Target", Actor);
 		}
 		else
 		{
 			//BlackboardComponent->SetValueAsBool("CanSeePlayer", false);
-			BlackboardComponent->SetValueAsEnum("State",static_cast<uint8>(EAiState::Explore));
+			BlackboardComponent->SetValueAsEnum("State",static_cast<uint8>(EAIState::Explore));
 			BlackboardComponent->SetValueAsObject("Target", nullptr);
 		}
 	}
