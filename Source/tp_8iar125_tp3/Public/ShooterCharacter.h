@@ -18,6 +18,9 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UAIPerceptionStimuliSourceComponent* StimuliSource;
 
 public:
 	AShooterCharacter();
