@@ -57,9 +57,14 @@ void AShooterAIController::BeginPlay()
 	Super::BeginPlay();
 
 	check(PerceptionComponent);
-	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AShooterAIController::OnTargetPerceptionUpdated);
+	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(
+		this,
+		&AShooterAIController::OnTargetPerceptionUpdated
+	);
 	PerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(
-		this, &AShooterAIController::OnTargetPerceptionForgotten);
+		this,
+		&AShooterAIController::OnTargetPerceptionForgotten
+	);
 }
 
 void AShooterAIController::OnPossess(APawn* InPawn)
