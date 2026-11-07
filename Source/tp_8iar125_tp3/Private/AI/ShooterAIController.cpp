@@ -49,8 +49,8 @@ void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 
 AShooterAIController::AShooterAIController(const FObjectInitializer&)
 {
-	const auto PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComponent"));
-	SetPerceptionComponent(*PerceptionComponent);
+	const auto AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComponent"));
+	SetPerceptionComponent(*AIPerceptionComponent);
 
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 }
