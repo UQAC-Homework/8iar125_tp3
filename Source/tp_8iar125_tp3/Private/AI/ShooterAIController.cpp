@@ -51,8 +51,6 @@ AShooterAIController::AShooterAIController(const FObjectInitializer&)
 {
 	const auto AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComponent"));
 	SetPerceptionComponent(*AIPerceptionComponent);
-
-	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 }
 
 void AShooterAIController::BeginPlay()

@@ -11,9 +11,6 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AI, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UAISenseConfig_Sight> SightConfig;
-
 	UPROPERTY(EditDefaultsOnly, Category=AI)
 	TObjectPtr<UBehaviorTree> TreeAsset;
 
