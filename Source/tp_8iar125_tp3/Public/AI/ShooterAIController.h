@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "AIState.h"
 #include "Perception/AIPerceptionTypes.h"
-#include "Perception/AISenseConfig_Sight.h"
 #include "ShooterAIController.generated.h"
 
 UCLASS()
@@ -21,6 +21,9 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 	/// Called when a stimulus is forgotten
 	UFUNCTION()
 	void OnTargetPerceptionForgotten(AActor* Actor);
+
+	/// Sets the current state to the given state
+	void SetState(EAIState NewState);
 
 public:
 	explicit AShooterAIController(const FObjectInitializer& ObjectInitializer);

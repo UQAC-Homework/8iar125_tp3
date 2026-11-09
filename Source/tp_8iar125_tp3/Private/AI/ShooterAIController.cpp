@@ -24,7 +24,7 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		if (Stimulus.WasSuccessfullySensed())
 		{
 			// Follow target
-			BlackboardComponent->SetValueAsEnum("State", static_cast<uint8>(EAIState::Attack));
+			SetState(EAIState::Attack);
 			BlackboardComponent->SetValueAsObject("Target", Actor);
 		}
 		else
@@ -38,13 +38,18 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 
 void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 {
+	// Revert to explore
+	SetState(EAIState::Explore);
+}
+
+void AShooterAIController::SetState(EAIState NewState)
+{
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
 
 	if (!BlackboardComponent)
 		return;
 
-	// Revert to explore
-	BlackboardComponent->SetValueAsEnum("State", static_cast<uint8>(EAIState::Explore));
+	BlackboardComponent->SetValueAsEnum("State", static_cast<uint8>(NewState));
 }
 
 AShooterAIController::AShooterAIController(const FObjectInitializer&)
