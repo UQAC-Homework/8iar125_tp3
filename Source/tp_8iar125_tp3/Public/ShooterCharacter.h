@@ -18,9 +18,12 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionStimuliSourceComponent* StimuliSource;
+
+	/// Updates the aiming state of the character
+	void SetAiming(bool bSetAiming);
 
 public:
 	AShooterCharacter();
@@ -64,15 +67,21 @@ protected:
 	void LookUpAtRate(float Rate);
 
 	// Aiming function
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Aim();
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void StopAiming();
 
 	// Firing function
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
 	/// Spawns an impact particle at the given location
 	void SpawnImpactParticle(const FVector& Location) const;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Firing")
+	bool IsAiming;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -81,10 +90,6 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-	// Is Aiming
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Aiming")
-	bool IsAiming;
 
 	// Is Firing
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Firing")

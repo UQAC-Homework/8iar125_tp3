@@ -8,6 +8,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 
+void AShooterCharacter::SetAiming(const bool bSetAiming)
+{
+	if (IsAiming == bSetAiming)
+		return;
+	
+	IsAiming = bSetAiming;
+	SetAiming(bSetAiming);
+}
+
 AShooterCharacter::AShooterCharacter()
 {
 	// Set size for collision capsule
@@ -87,12 +96,14 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AShooterCharacter::Aim()
 {
-	IsAiming = true;
+	SetAiming(true);
+	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
 void AShooterCharacter::StopAiming()
 {
-	IsAiming = false;
+	SetAiming(false);
+	GetCharacterMovement()->MaxWalkSpeed = 500;
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
