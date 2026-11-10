@@ -21,12 +21,15 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 	/// Called when a stimulus is forgotten
 	UFUNCTION()
 	void OnTargetPerceptionForgotten(AActor* Actor);
-
+	
 	/// Sets the current state to the given state
 	void SetState(EAIState NewState);
 
 public:
 	explicit AShooterAIController(const FObjectInitializer& ObjectInitializer);
+	
+	UFUNCTION()
+	void OnDamageTaken(float CurrentHealth);
 
 protected:
 	virtual void BeginPlay() override;

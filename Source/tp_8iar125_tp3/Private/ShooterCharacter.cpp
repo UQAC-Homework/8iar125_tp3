@@ -1,6 +1,9 @@
 #include "tp_8iar125_tp3/Public/ShooterCharacter.h"
+
+#include "AI/ShooterAIController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/HealthComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -65,6 +68,7 @@ AShooterCharacter::AShooterCharacter()
 	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
 	StimuliSource->RegisterWithPerceptionSystem();
 	
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -143,6 +147,14 @@ void AShooterCharacter::Fire()
 		return;
 
 	SpawnImpactParticle(Hit.ImpactPoint);
+	
+	if (!Hit.GetActor())
+		return;
+	
+	if (AShooterCharacter* Character =  Cast<AShooterCharacter>(Hit.GetActor()))
+	{
+		Character->GetHealthComponent()->TakeDamage(1.0f);
+	}
 }
 
 void AShooterCharacter::SpawnImpactParticle(const FVector& Location) const
@@ -158,6 +170,18 @@ void AShooterCharacter::SpawnImpactParticle(const FVector& Location) const
 	ParticleT.SetLocation(Location);
 
 	UGameplayStatics::SpawnEmitterAtLocation(World, ParticleImpact, ParticleT, true);
+}
+
+void AShooterCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	//HealthComponent->OnDamageTaken.AddDynamic(this,&AShooterCharacter::UpdateBehavior);
+	
+	if (AShooterAIController* ShooterAIController = Cast<AShooterAIController>(GetController()))
+	{
+		HealthComponent->OnDamageTaken.AddDynamic(ShooterAIController,&AShooterAIController::OnDamageTaken);
+	}
 }
 
 void AShooterCharacter::TurnAtRate(const float Rate)

@@ -24,6 +24,10 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 
 	/// Updates the aiming state of the character
 	void SetAiming(bool bSetAiming);
+	
+	// Simple health 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UHealthComponent* HealthComponent;
 
 public:
 	AShooterCharacter();
@@ -83,11 +87,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Firing")
 	bool IsAiming;
 
+	virtual void BeginPlay() override;
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
+	FORCEINLINE UHealthComponent* GetHealthComponent() const { return HealthComponent; }
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 

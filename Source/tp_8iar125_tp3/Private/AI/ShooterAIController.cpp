@@ -42,6 +42,12 @@ void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 	SetState(EAIState::Explore);
 }
 
+void AShooterAIController::OnDamageTaken(float CurrentHealth)
+{
+	if (CurrentHealth != 0.0f)
+		SetState(EAIState::Cover);
+}
+
 void AShooterAIController::SetState(EAIState NewState)
 {
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
