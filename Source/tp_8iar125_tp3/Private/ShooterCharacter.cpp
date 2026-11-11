@@ -153,7 +153,7 @@ void AShooterCharacter::Fire()
 	
 	if (AShooterCharacter* Character =  Cast<AShooterCharacter>(Hit.GetActor()))
 	{
-		Character->GetHealthComponent()->TakeDamage(1.0f);
+		Character->GetHealthComponent()->TakeDamage(1.0f,this);
 	}
 }
 
@@ -180,7 +180,7 @@ void AShooterCharacter::BeginPlay()
 	
 	if (AShooterAIController* ShooterAIController = Cast<AShooterAIController>(GetController()))
 	{
-		HealthComponent->OnDamageTaken.AddDynamic(ShooterAIController,&AShooterAIController::OnDamageTaken);
+		HealthComponent->OnDamageTaken.AddDynamic(ShooterAIController,&AShooterAIController::OnGettingAttacked);
 	}
 }
 

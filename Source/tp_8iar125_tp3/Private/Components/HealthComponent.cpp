@@ -22,7 +22,7 @@ void UHealthComponent::BeginPlay()
 	CurrentHealth = MaxHealth;
 }
 
-void UHealthComponent::TakeDamage(float Damage)
+void UHealthComponent::TakeDamage(float Damage,AActor* DamageDealer)
 {
 	if (Damage <= 0.0f || CurrentHealth <= 0.0f)
 	{
@@ -30,7 +30,7 @@ void UHealthComponent::TakeDamage(float Damage)
 	}
 
 	CurrentHealth = FMath::Max(0.0f, CurrentHealth - Damage);
-	OnDamageTaken.Broadcast(CurrentHealth);
+	OnDamageTaken.Broadcast(CurrentHealth,DamageDealer);
 	
 	if (CurrentHealth <= 0.0f)
 	{

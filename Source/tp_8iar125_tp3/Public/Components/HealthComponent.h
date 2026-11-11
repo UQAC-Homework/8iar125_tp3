@@ -7,7 +7,7 @@
 #include "HealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTaken,float,CurrentHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDamageTaken,float,CurrentHealth,AActor*,AttackerActor);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UHealthComponent : public UActorComponent
@@ -27,7 +27,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	void TakeDamage(float Damage);
+	void TakeDamage(float Damage, AActor* DamageDealer);
 	
 	//I would prefer it to be private to be sure it's not called by other classes
 	FOnDeath OnDeath;

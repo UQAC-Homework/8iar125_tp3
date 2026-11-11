@@ -40,11 +40,15 @@ void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 {
 	// Revert to explore
 	SetState(EAIState::Explore);
+	
+	//Should keep targetting for 6 secondes
 }
 
-void AShooterAIController::OnDamageTaken(float CurrentHealth)
+void AShooterAIController::OnGettingAttacked(float CurrentHealth,AActor* AttackerActor)
 {
-	if (CurrentHealth != 0.0f)
+		//Set context to the target
+		TargetActor = AttackerActor;
+		
 		SetState(EAIState::Cover);
 }
 

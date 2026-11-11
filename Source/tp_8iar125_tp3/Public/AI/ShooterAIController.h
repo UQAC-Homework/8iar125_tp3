@@ -13,6 +13,7 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 
 	UPROPERTY(EditDefaultsOnly, Category=AI)
 	TObjectPtr<UBehaviorTree> TreeAsset;
+	
 
 	/// Called when a stimulus has changed
 	UFUNCTION()
@@ -29,7 +30,10 @@ public:
 	explicit AShooterAIController(const FObjectInitializer& ObjectInitializer);
 	
 	UFUNCTION()
-	void OnDamageTaken(float CurrentHealth);
+	void OnGettingAttacked(float CurrentHealth,AActor* AttackerActor);
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	AActor* TargetActor;
 
 protected:
 	virtual void BeginPlay() override;
