@@ -14,6 +14,10 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 	UPROPERTY(EditDefaultsOnly, Category=AI)
 	TObjectPtr<UBehaviorTree> TreeAsset;
 	
+	FTimerHandle LostOfSightTimerHandle;
+	
+	UPROPERTY(EditDefaultsOnly, Category=AI)
+	float TimeFromChaseToExplore = 6.0f;
 
 	/// Called when a stimulus has changed
 	UFUNCTION()
@@ -25,6 +29,9 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 	
 	/// Sets the current state to the given state
 	void SetState(EAIState NewState);
+	
+	// Sets the state to explore when timer is finish
+	void EndOfTimer();
 
 public:
 	explicit AShooterAIController(const FObjectInitializer& ObjectInitializer);

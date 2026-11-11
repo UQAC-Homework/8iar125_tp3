@@ -11,6 +11,9 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 {
 	const AShooterCharacter* ShootCharacter = Cast<AShooterCharacter>(Actor);
 
+	//Clear the timer
+	GetWorld()->GetTimerManager().ClearTimer(LostOfSightTimerHandle);
+	
 	if (!ShootCharacter)
 		return;
 
@@ -30,7 +33,7 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		else
 		{
 			// Go to last position
-			BlackboardComponent->SetValueAsObject("Target", nullptr);
+			//BlackboardComponent->SetValueAsObject("Target", nullptr);
 			BlackboardComponent->SetValueAsVector("NextPosition", Stimulus.StimulusLocation);
 		}
 	}
@@ -39,17 +42,26 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 {
 	// Revert to explore
-	SetState(EAIState::Explore);
+	//SetState(EAIState::Explore);
 	
 	//Should keep targetting for 6 secondes
+	//might be null
+	GetWorld()->GetTimerManager().SetTimer(LostOfSightTimerHandle,this,&AShooterAIController::EndOfTimer,TimeFromChaseToExplore,false);
 }
 
 void AShooterAIController::OnGettingAttacked(float CurrentHealth,AActor* AttackerActor)
 {
-		//Set context to the target
-		TargetActor = AttackerActor;
+	//Set context to the target
+	TargetActor = AttackerActor;
 		
-		SetState(EAIState::Cover);
+	SetState(EAIState::Cover);
+	
+	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
+
+	if (!BlackboardComponent)
+		return;
+	
+	BlackboardComponent->SetValueAsObject("Target", nullptr);
 }
 
 void AShooterAIController::SetState(EAIState NewState)
@@ -60,6 +72,11 @@ void AShooterAIController::SetState(EAIState NewState)
 		return;
 
 	BlackboardComponent->SetValueAsEnum("State", static_cast<uint8>(NewState));
+}
+
+void AShooterAIController::EndOfTimer()
+{
+	SetState(EAIState::Explore);
 }
 
 AShooterAIController::AShooterAIController(const FObjectInitializer&)
