@@ -4,7 +4,12 @@ UTeamComponent::UTeamComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	Team = None;
+	Team = ETeam::None;
+}
+
+ETeam UTeamComponent::GetTeam() const
+{
+	return Team;
 }
 
 void UTeamComponent::SetTeam(const ETeam NewTeam)

@@ -13,14 +13,19 @@ class TEAMSYSTEM_API UTeamComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, Setter=SetTeam, Category = "Team")
-	TEnumAsByte<ETeam> Team;
+	UPROPERTY(EditAnywhere, Getter=GetTeam, Setter=SetTeam, Category = "Team")
+	ETeam Team;
 
+	/// Called when the team has changed
 	UPROPERTY(BlueprintAssignable, Category = "Team")
 	FOnTeamChangedDelegate OnTeamChanged;
 
 public:
 	UTeamComponent();
+
+	/// Gets the current team of this component
+	UFUNCTION(BlueprintCallable, Category = "Team")
+	ETeam GetTeam() const;
 
 	/// Sets the team of this component to the given team
 	UFUNCTION(BlueprintCallable, Category = "Team")
