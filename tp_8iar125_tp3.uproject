@@ -12,6 +12,11 @@
 				"AIModule",
 				"Engine"
 			]
+		},
+		{
+			"Name": "TeamSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
