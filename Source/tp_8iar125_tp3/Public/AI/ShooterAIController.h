@@ -26,6 +26,7 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 	void OnTargetPerceptionForgotten(AActor* Actor);
 	
 	/// Sets the current state to the given state
+	UFUNCTION(BlueprintCallable)
 	void SetState(EAIState NewState);
 	
 public:
