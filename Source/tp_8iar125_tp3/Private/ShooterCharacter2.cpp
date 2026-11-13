@@ -1,4 +1,4 @@
-#include "tp_8iar125_tp3/Public/ShooterCharacter.h"
+#include "tp_8iar125_tp3/Public/ShooterCharacter2.h"
 
 #include "AI/ShooterAIController.h"
 #include "Camera/CameraComponent.h"
@@ -11,16 +11,16 @@
 #include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 
-void AShooterCharacter::SetAiming(const bool bSetAiming)
+void AShooterCharacter2::SetAiming(const bool bSetAiming)
 {
 	if (IsAiming == bSetAiming)
 		return;
 	
 	IsAiming = bSetAiming;
-	SetAiming(bSetAiming);
+	//SetAiming(bSetAiming);
 }
 
-AShooterCharacter::AShooterCharacter()
+AShooterCharacter2::AShooterCharacter2()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -74,44 +74,44 @@ AShooterCharacter::AShooterCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AShooterCharacter2::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AShooterCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("Move Right / Left", this, &AShooterCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AShooterCharacter2::MoveForward);
+	PlayerInputComponent->BindAxis("Move Right / Left", this, &AShooterCharacter2::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("Turn Right / Left Gamepad", this, &AShooterCharacter::TurnAtRate);
+	PlayerInputComponent->BindAxis("Turn Right / Left Gamepad", this, &AShooterCharacter2::TurnAtRate);
 	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &AShooterCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &AShooterCharacter2::LookUpAtRate);
 
 	// Aiming 
-	PlayerInputComponent->BindAction("Aiming", IE_Pressed, this, &AShooterCharacter::Aim);
-	PlayerInputComponent->BindAction("Aiming", IE_Released, this, &AShooterCharacter::StopAiming);
+	PlayerInputComponent->BindAction("Aiming", IE_Pressed, this, &AShooterCharacter2::Aim);
+	PlayerInputComponent->BindAction("Aiming", IE_Released, this, &AShooterCharacter2::StopAiming);
 
 	// Fire
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AShooterCharacter::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AShooterCharacter2::Fire);
 }
 
-void AShooterCharacter::Aim()
+void AShooterCharacter2::Aim()
 {
 	SetAiming(true);
 	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
-void AShooterCharacter::StopAiming()
+void AShooterCharacter2::StopAiming()
 {
 	SetAiming(false);
 	GetCharacterMovement()->MaxWalkSpeed = 500;
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void AShooterCharacter::Fire()
+void AShooterCharacter2::Fire()
 {
 	if (!IsAiming)
 		return;
@@ -151,13 +151,13 @@ void AShooterCharacter::Fire()
 	if (!Hit.GetActor())
 		return;
 	
-	if (AShooterCharacter* Character =  Cast<AShooterCharacter>(Hit.GetActor()))
+	if (AShooterCharacter2* Character =  Cast<AShooterCharacter2>(Hit.GetActor()))
 	{
 		Character->GetHealthComponent()->TakeDamage(1.0f,this);
 	}
 }
 
-void AShooterCharacter::SpawnImpactParticle(const FVector& Location) const
+void AShooterCharacter2::SpawnImpactParticle(const FVector& Location) const
 {
 	if (!ParticleImpact)
 		return;
@@ -172,11 +172,11 @@ void AShooterCharacter::SpawnImpactParticle(const FVector& Location) const
 	UGameplayStatics::SpawnEmitterAtLocation(World, ParticleImpact, ParticleT, true);
 }
 
-void AShooterCharacter::BeginPlay()
+void AShooterCharacter2::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//HealthComponent->OnDamageTaken.AddDynamic(this,&AShooterCharacter::UpdateBehavior);
+	//HealthComponent->OnDamageTaken.AddDynamic(this,&AShooterCharacter2::UpdateBehavior);
 	
 	if (AShooterAIController* ShooterAIController = Cast<AShooterAIController>(GetController()))
 	{
@@ -184,19 +184,19 @@ void AShooterCharacter::BeginPlay()
 	}
 }
 
-void AShooterCharacter::TurnAtRate(const float Rate)
+void AShooterCharacter2::TurnAtRate(const float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
 }
 
-void AShooterCharacter::LookUpAtRate(const float Rate)
+void AShooterCharacter2::LookUpAtRate(const float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
 }
 
-void AShooterCharacter::MoveForward(const float Value)
+void AShooterCharacter2::MoveForward(const float Value)
 {
 	if (Value == 0.0f)
 		return;
@@ -212,7 +212,7 @@ void AShooterCharacter::MoveForward(const float Value)
 	AddMovementInput(Direction, Value);
 }
 
-void AShooterCharacter::MoveRight(const float Value)
+void AShooterCharacter2::MoveRight(const float Value)
 {
 	if (Value == 0.0f)
 		return;

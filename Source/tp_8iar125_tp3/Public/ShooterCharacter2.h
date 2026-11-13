@@ -4,10 +4,10 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "ShooterCharacter.generated.h"
+#include "ShooterCharacter2.generated.h"
 
 UCLASS()
-class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
+class TP_8IAR125_TP3_API AShooterCharacter2 : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -30,7 +30,7 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 	class UHealthComponent* HealthComponent;
 
 public:
-	AShooterCharacter();
+	AShooterCharacter2();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Input)
