@@ -1,4 +1,4 @@
-#include "Characters/ShooterCharacter.h"
+#include "ShooterCharacter.h"
 
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"

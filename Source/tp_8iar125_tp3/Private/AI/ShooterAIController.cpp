@@ -1,6 +1,6 @@
 #include "AI/ShooterAIController.h"
 
-#include "ShooterCharacter2.h"
+#include "ShooterCharacter.h"
 #include "AI/AIState.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -9,7 +9,7 @@
 
 void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus const Stimulus)
 {
-	const AShooterCharacter2* ShootCharacter = Cast<AShooterCharacter2>(Actor);
+	const AShooterCharacter* ShootCharacter = Cast<AShooterCharacter>(Actor);
 
 	//Clear the timer
 	GetWorld()->GetTimerManager().ClearTimer(LostOfSightTimerHandle);
