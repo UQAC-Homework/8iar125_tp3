@@ -6,14 +6,12 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISense_Damage.h"
 
 void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus const Stimulus)
 {
 	const AShooterCharacter* ShootCharacter = Cast<AShooterCharacter>(Actor);
 
-	//Clear the timer
-	GetWorld()->GetTimerManager().ClearTimer(LostOfSightTimerHandle);
-	
 	if (!ShootCharacter)
 		return;
 
@@ -33,20 +31,22 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		else
 		{
 			// Go to last position
-			//BlackboardComponent->SetValueAsObject("Target", nullptr);
+			BlackboardComponent->SetValueAsObject("Target", nullptr);
 			BlackboardComponent->SetValueAsVector("NextPosition", Stimulus.StimulusLocation);
 		}
+	}
+	else if (Stimulus.Type == UAISense::GetSenseID<UAISense_Damage>())
+	{
+		BlackboardComponent->SetValueAsVector("NextPosition", Stimulus.StimulusLocation);
+		SetState(EAIState::Cover);
+		//OnGettingAttacked()
 	}
 }
 
 void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 {
 	// Revert to explore
-	//SetState(EAIState::Explore);
-	
-	//Should keep targetting for 6 secondes
-	//might be null
-	GetWorld()->GetTimerManager().SetTimer(LostOfSightTimerHandle,this,&AShooterAIController::EndOfTimer,TimeFromChaseToExplore,false);
+	SetState(EAIState::Explore);
 }
 
 void AShooterAIController::OnGettingAttacked(float CurrentHealth,AActor* AttackerActor)
@@ -72,11 +72,6 @@ void AShooterAIController::SetState(EAIState NewState)
 		return;
 
 	BlackboardComponent->SetValueAsEnum("State", static_cast<uint8>(NewState));
-}
-
-void AShooterAIController::EndOfTimer()
-{
-	SetState(EAIState::Explore);
 }
 
 AShooterAIController::AShooterAIController(const FObjectInitializer&)
