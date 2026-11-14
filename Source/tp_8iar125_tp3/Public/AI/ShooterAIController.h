@@ -13,9 +13,6 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 
 	UPROPERTY(EditDefaultsOnly, Category=AI)
 	TObjectPtr<UBehaviorTree> TreeAsset;
-	
-	UPROPERTY(EditDefaultsOnly, Category=AI)
-	float TimeFromChaseToExplore = 6.0f;
 
 	/// Called when a stimulus has changed
 	UFUNCTION()
@@ -32,11 +29,9 @@ class TP_8IAR125_TP3_API AShooterAIController : public AAIController
 public:
 	explicit AShooterAIController(const FObjectInitializer& ObjectInitializer);
 	
+	// Go to cover mode
 	UFUNCTION()
-	void OnGettingAttacked(float CurrentHealth,AActor* AttackerActor);
-	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	AActor* TargetActor;
+	void IsGettingAttacked(AActor* AttackerActor);
 
 protected:
 	virtual void BeginPlay() override;

@@ -25,6 +25,14 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 	/// Damage the character deals with its weapon
 	UPROPERTY(EditAnywhere, Category=Fire, meta=(ClampMin=0))
 	float WeaponDamage;
+	
+	//Starting health of the character
+	UPROPERTY(EditAnywhere, Category=Health, meta=(ClampMin=0))
+	float MaxHealth = 10.0f;
+	
+	//Current health of the character
+	UPROPERTY(VisibleAnywhere, Category=Health, meta=(ClampMin=0))
+	float CurrentHealth;
 
 protected:
 	/// Called when this character fires and hits something
@@ -48,4 +56,6 @@ public:
 	/// Fires a bullet
 	UFUNCTION(BlueprintCallable, Category=Fire)
 	virtual void DoFire(FVector StartLocation, FVector EndLocation);
+	
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };

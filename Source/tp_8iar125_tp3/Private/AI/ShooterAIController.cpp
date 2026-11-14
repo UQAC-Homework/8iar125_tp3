@@ -49,11 +49,8 @@ void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 	SetState(EAIState::Explore);
 }
 
-void AShooterAIController::OnGettingAttacked(float CurrentHealth,AActor* AttackerActor)
+void AShooterAIController::IsGettingAttacked(AActor* AttackerActor)
 {
-	//Set context to the target
-	TargetActor = AttackerActor;
-		
 	SetState(EAIState::Cover);
 	
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
@@ -61,7 +58,7 @@ void AShooterAIController::OnGettingAttacked(float CurrentHealth,AActor* Attacke
 	if (!BlackboardComponent)
 		return;
 	
-	BlackboardComponent->SetValueAsObject("Target", nullptr);
+	//BlackboardComponent->SetValueAsObject("Target", nullptr);
 }
 
 void AShooterAIController::SetState(EAIState NewState)
