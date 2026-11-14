@@ -6,6 +6,9 @@
 
 void AShooterCharacter::OnFireHit(FVector ImpactPoint, AActor* Actor)
 {
+	if (OnBulletHit.IsBound())
+		OnBulletHit.Broadcast(ImpactPoint, Actor);
+
 	if (!Actor)
 		return;
 
@@ -22,30 +25,28 @@ void AShooterCharacter::OnFireHit(FVector ImpactPoint, AActor* Actor)
 		GetController(),
 		this
 	);
-	
-	
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
-	class AController* EventInstigator, AActor* DamageCauser)
+                                    class AController* EventInstigator, AActor* DamageCauser)
 {
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
+
 	if (ActualDamage > 0.0f)
 	{
 		CurrentHealth = FMath::Max(0.0f, CurrentHealth - ActualDamage);
-	
+
 		if (CurrentHealth <= 0.0f)
 		{
 			// Is dead should respawn 
 			return 0.0f;
 		}
-	
-		AShooterAIController* AIController =  Cast<AShooterAIController>(GetController());
-	
+
+		AShooterAIController* AIController = Cast<AShooterAIController>(GetController());
+
 		if (!AIController)
 			return ActualDamage;
-	
+
 		AIController->IsGettingAttacked(DamageCauser);
 	}
 	return ActualDamage;

@@ -4,6 +4,8 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnBulletHit, FVector, ImpactPoint, AActor*, Actor);
+
 /// Class that represents a generic shooter character
 UCLASS()
 class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
@@ -25,14 +27,18 @@ class TP_8IAR125_TP3_API AShooterCharacter : public ACharacter
 	/// Damage the character deals with its weapon
 	UPROPERTY(EditAnywhere, Category=Fire, meta=(ClampMin=0))
 	float WeaponDamage;
-	
+
 	//Starting health of the character
 	UPROPERTY(EditAnywhere, Category=Health, meta=(ClampMin=0))
 	float MaxHealth = 10.0f;
-	
+
 	//Current health of the character
 	UPROPERTY(VisibleAnywhere, Category=Health, meta=(ClampMin=0))
 	float CurrentHealth;
+
+	/// Called when a bullet of this character hit something
+	UPROPERTY(BlueprintAssignable, Category=Fire)
+	FOnBulletHit OnBulletHit;
 
 protected:
 	/// Called when this character fires and hits something
