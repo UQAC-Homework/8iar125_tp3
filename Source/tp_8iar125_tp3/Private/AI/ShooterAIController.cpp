@@ -1,6 +1,7 @@
 #include "AI/ShooterAIController.h"
 
 #include "ShooterCharacter.h"
+#include "TeamUtilities.h"
 #include "AI/AIState.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -13,6 +14,15 @@ void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	const AShooterCharacter* ShootCharacter = Cast<AShooterCharacter>(Actor);
 
 	if (!ShootCharacter)
+		return;
+
+	const auto Pawn = GetPawn();
+	check(Pawn);
+
+	const auto SelfTeam = UTeamUtilities::GetTeam(Pawn);
+	const auto OtherTeam = UTeamUtilities::GetTeam(Actor);
+
+	if (SelfTeam == OtherTeam)
 		return;
 
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
@@ -52,12 +62,12 @@ void AShooterAIController::OnTargetPerceptionForgotten(AActor* Actor)
 void AShooterAIController::IsGettingAttacked(AActor* AttackerActor)
 {
 	SetState(EAIState::Cover);
-	
+
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
 
 	if (!BlackboardComponent)
 		return;
-	
+
 	//BlackboardComponent->SetValueAsObject("Target", nullptr);
 }
 
