@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "ETeam.h"
+#include "Data/TeamDefinition.h"
+#include "Data/TeamRelationType.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "TeamUtilities.generated.h"
 
@@ -15,9 +17,17 @@ class TEAMSYSTEM_API UTeamUtilities : public UBlueprintFunctionLibrary
 public:
 	/// Gets the team of the given actor
 	UFUNCTION(BlueprintPure, Category=TEAM_CATEGORY)
-	static ETeam GetTeam(const AActor* InActor);
+	static UTeamDefinition* GetTeam(const AActor* InActor);
 
-	/// Filters all actors that are not on the given team
-	UFUNCTION(BlueprintPure, Category=TEAM_CATEGORY, meta = (DeterminesOutputType = "InActors"))
-	static TArray<AActor*> KeepOnlyTeam(const TArray<AActor*>& InActors, ETeam TargetTeam);
+	/// Gets the relationship between the given actors
+	UFUNCTION(BlueprintPure, Category=TEAM_CATEGORY)
+	static ETeamRelationType GetRelationship(const AActor* From, const AActor* To);
+
+	/// Filters the actors that do not have the given relationship with the given viewer
+	UFUNCTION(BlueprintPure, Category=TEAM_CATEGORY, meta=(DeterminesOutputType="InActors"))
+	static TArray<AActor*> KeepOnlyRelationship(
+		const TArray<AActor*>& InActors,
+		const AActor* Viewer,
+		ETeamRelationType Type
+	);
 };

@@ -4,15 +4,15 @@ UTeamComponent::UTeamComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	Team = ETeam::None;
+	Team = nullptr;
 }
 
-ETeam UTeamComponent::GetTeam() const
+UTeamDefinition* UTeamComponent::GetTeam() const
 {
 	return Team;
 }
 
-void UTeamComponent::SetTeam(const ETeam NewTeam)
+void UTeamComponent::SetTeam(UTeamDefinition* NewTeam)
 {
 	if (Team == NewTeam)
 		return;

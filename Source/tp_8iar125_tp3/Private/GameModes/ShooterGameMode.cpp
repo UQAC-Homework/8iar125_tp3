@@ -1,7 +1,6 @@
 #include "GameModes/ShooterGameMode.h"
 
-#include "AIController.h"
-#include "AI/ShooterAIController.h"
+#include "TeamSubsystem.h"
 #include "Spawn/SpawningSubsystem.h"
 
 class USpawningSubsystem;
@@ -22,4 +21,17 @@ void AShooterGameMode::HandleDeath_Implementation(AController* Controller, TSubc
 		return;
 
 	SpawnSystem->RespawnAs(Controller, PawnClass);
+}
+
+void AShooterGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+	
+	const auto World = GetWorld();
+	check(World);
+	
+	const auto Teams = World->GetSubsystem<UTeamSubsystem>();
+
+	if (Teams)
+		Teams->SetRelationships(TeamRelationships);
 }
