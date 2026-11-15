@@ -5,11 +5,6 @@
 
 class USpawningSubsystem;
 
-ETeam AShooterGameMode::GetEnemyTeam_Implementation(ETeam Team)
-{
-	return ETeam::None;
-}
-
 void AShooterGameMode::HandleDeath_Implementation(AController* Controller, TSubclassOf<APawn> PawnClass)
 {
 	const auto World = GetWorld();

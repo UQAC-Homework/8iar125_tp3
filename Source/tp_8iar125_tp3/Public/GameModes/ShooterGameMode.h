@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ETeam.h"
 #include "Data/TeamRelationships.h"
 #include "GameFramework/GameModeBase.h"
 #include "ShooterGameMode.generated.h"
@@ -16,10 +15,6 @@ class TP_8IAR125_TP3_API AShooterGameMode : public AGameModeBase
 
 public:
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
-
-	/// Gets the team enemy of the given team
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category=Team)
-	ETeam GetEnemyTeam(ETeam Team);
 
 	/// Handles the given controller when its pawn was killed
 	UFUNCTION(BlueprintNativeEvent, Category=Spawn)
