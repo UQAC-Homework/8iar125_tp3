@@ -11,13 +11,15 @@
 
 void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus const Stimulus)
 {
+	const auto Pawn = GetPawn();
+
+	if (!Pawn)
+		return;
+
 	const AShooterCharacter* ShootCharacter = Cast<AShooterCharacter>(Actor);
 
 	if (!ShootCharacter)
 		return;
-
-	const auto Pawn = GetPawn();
-	check(Pawn);
 
 	const auto SelfTeam = UTeamUtilities::GetTeam(Pawn);
 	const auto OtherTeam = UTeamUtilities::GetTeam(Actor);
