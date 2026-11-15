@@ -2,15 +2,51 @@
 
 #include "TeamComponent.h"
 #include "TeamSubsystem.h"
+#include "GameFramework/PlayerState.h"
+
+UTeamComponent* UTeamUtilities::GetTeamComponent(const AActor* InActor)
+{
+	if (!InActor)
+		return nullptr;
+
+	const auto SelfComponent = InActor->FindComponentByClass<UTeamComponent>();
+
+	if (SelfComponent)
+		return SelfComponent;
+
+	const auto Pawn = Cast<APawn>(InActor);
+
+	if (!Pawn)
+		return nullptr;
+
+	const auto Controller = Pawn->GetController();
+
+	if (Controller)
+	{
+		const auto Comp = GetTeamComponent(Controller);
+		
+		if (Comp)
+			return Comp;
+	}
+
+	const auto PlayerState = Pawn->GetPlayerState();
+
+	if (PlayerState)
+	{
+		const auto Comp = GetTeamComponent(PlayerState);
+		
+		if (Comp)
+			return Comp;
+	}
+
+	return nullptr;
+}
 
 UTeamDefinition* UTeamUtilities::GetTeam(const AActor* InActor)
 {
-	if (!IsValid(InActor))
-		return nullptr;
+	const auto TeamComponent = GetTeamComponent(InActor);
 
-	const auto TeamComponent = InActor->FindComponentByClass<UTeamComponent>();
-
-	if (!IsValid(TeamComponent))
+	if (!TeamComponent)
 		return nullptr;
 
 	return TeamComponent->GetTeam();
