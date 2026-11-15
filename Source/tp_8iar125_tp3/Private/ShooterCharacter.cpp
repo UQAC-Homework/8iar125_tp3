@@ -1,8 +1,10 @@
 #include "ShooterCharacter.h"
 
+#include "HealthComponent.h"
 #include "AI/ShooterAIController.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameModes/ShooterGameMode.h"
 
 void AShooterCharacter::OnFireHit(FVector ImpactPoint, AActor* Actor)
 {
@@ -25,6 +27,23 @@ void AShooterCharacter::OnFireHit(FVector ImpactPoint, AActor* Actor)
 		GetController(),
 		this
 	);
+}
+
+void AShooterCharacter::HandleDeath(AActor* Source)
+{
+	AController* Controller = GetController();
+	TSubclassOf<APawn> PawnClass = GetClass();
+
+	if (Controller)
+		Controller->UnPossess();
+
+	const auto World = GetWorld();
+	check(World);
+
+	const auto GameMode = Cast<AShooterGameMode>(World->GetAuthGameMode());
+
+	if (GameMode)
+		GameMode->HandleDeath(Controller, PawnClass);
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -60,6 +79,16 @@ AShooterCharacter::AShooterCharacter()
 	AimedWalkSpeed = 200;
 
 	WeaponDamage = 1.0f;
+}
+
+void AShooterCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	const auto Health = FindComponentByClass<UHealthComponent>();
+
+	if (Health)
+		Health->OnDeath.AddDynamic(this, &AShooterCharacter::HandleDeath);
 }
 
 void AShooterCharacter::DoStartAim()

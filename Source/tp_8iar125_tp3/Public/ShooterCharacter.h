@@ -45,8 +45,14 @@ protected:
 	UFUNCTION(Category=Fire)
 	virtual void OnFireHit(FVector ImpactPoint, AActor* Actor);
 
+	/// Called when this character dies
+	UFUNCTION()
+	virtual void HandleDeath(AActor* Source);
+
 public:
 	AShooterCharacter();
+	
+	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category=Fire)
 	FORCEINLINE bool IsAiming() const { return bIsAiming; }
@@ -62,6 +68,7 @@ public:
 	/// Fires a bullet
 	UFUNCTION(BlueprintCallable, Category=Fire)
 	virtual void DoFire(FVector StartLocation, FVector EndLocation);
-	
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	                         AController* EventInstigator, AActor* DamageCauser) override;
 };

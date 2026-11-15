@@ -11,11 +11,11 @@ void UHealthComponent::OnDamage(AActor* DamagedActor, float Damage, const UDamag
 	if (OnDamageTaken.IsBound())
 		OnDamageTaken.Broadcast(Damage, DamageCauser);
 
-	if (CurrentHealth > 0.0f)
-		return;
+	//if (CurrentHealth > 0.0f)
+	//	return;
 
 	if (OnDeath.IsBound())
-		OnDeath.Broadcast(Damage, DamageCauser);
+		OnDeath.Broadcast(DamageCauser);
 
 	const auto Owner = GetOwner();
 	Kill(Owner);

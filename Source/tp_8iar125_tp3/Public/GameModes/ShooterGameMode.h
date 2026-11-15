@@ -14,4 +14,8 @@ public:
 	/// Gets the team enemy of the given team
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category=Team)
 	ETeam GetEnemyTeam(ETeam Team);
+
+	/// Handles the given controller when its pawn was killed
+	UFUNCTION(BlueprintNativeEvent, Category=Spawn)
+	void HandleDeath(AController* Controller, TSubclassOf<APawn> PawnClass);
 };
