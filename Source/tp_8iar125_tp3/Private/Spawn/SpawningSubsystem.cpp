@@ -18,7 +18,5 @@ void USpawningSubsystem::UnregisterSpawner(ASpawner* Spawner)
 
 void USpawningSubsystem::RespawnAs(AController* Controller, const TSubclassOf<APawn> PawnClass)
 {
-	UE_LOG(LogTemp, Warning, TEXT("RespawnAs: %d spawners"), Spawners.Num());
-
 	Spawners[0]->Spawn(Controller, PawnClass);
 }
