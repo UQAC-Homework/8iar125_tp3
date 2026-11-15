@@ -6,7 +6,7 @@
 #include "SpawningSubsystem.generated.h"
 
 UCLASS()
-class HEALTHSYSTEM_API USpawningSubsystem : public UWorldSubsystem
+class TP_8IAR125_TP3_API USpawningSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
