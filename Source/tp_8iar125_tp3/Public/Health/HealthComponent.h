@@ -10,7 +10,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AActor*, Source);
 
 /// Component responsible to manage the health of an actor
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class HEALTHSYSTEM_API UHealthComponent : public UActorComponent
+class TP_8IAR125_TP3_API UHealthComponent : public UActorComponent
 {
 private:
 	GENERATED_BODY()

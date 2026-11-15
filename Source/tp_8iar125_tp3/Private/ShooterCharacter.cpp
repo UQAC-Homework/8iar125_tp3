@@ -1,6 +1,6 @@
 #include "ShooterCharacter.h"
 
-#include "HealthComponent.h"
+#include "Health/HealthComponent.h"
 #include "AI/ShooterAIController.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
