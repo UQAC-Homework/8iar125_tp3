@@ -16,6 +16,38 @@ void UHealthComponent::OnDamage(AActor* DamagedActor, float Damage, const UDamag
 
 	if (OnDeath.IsBound())
 		OnDeath.Broadcast(Damage, DamageCauser);
+
+	const auto Owner = GetOwner();
+	Kill(Owner);
+}
+
+void UHealthComponent::Kill(AActor* Actor)
+{
+	if (!Actor)
+		return;
+
+	if (Actor->IsPendingKillPending())
+	{
+		UE_LOGF(
+			LogTemp,
+			Warning,
+			"Tried to kill '%ls', but it is pending a kill.",
+			*Actor->GetName()
+		);
+		return;
+	}
+
+	const auto Pawn = Cast<APawn>(Actor);
+
+	if (Pawn)
+	{
+		const auto Controller = Pawn->GetController();
+		
+		if (Controller)
+			Controller->UnPossess();
+	}
+
+	Actor->Destroy();
 }
 
 UHealthComponent::UHealthComponent()

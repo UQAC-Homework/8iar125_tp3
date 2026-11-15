@@ -41,6 +41,9 @@ private:
 		AActor* DamageCauser
 	);
 
+	/// Kills the given actor
+	void Kill(AActor* Actor);
+
 public:
 	UHealthComponent();
 
