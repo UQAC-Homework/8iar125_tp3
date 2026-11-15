@@ -1,4 +1,4 @@
-#include "HealthComponent.h"
+#include "Health/HealthComponent.h"
 
 void UHealthComponent::OnDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
                                 AController* InstigatedBy, AActor* DamageCauser)
@@ -11,8 +11,8 @@ void UHealthComponent::OnDamage(AActor* DamagedActor, float Damage, const UDamag
 	if (OnDamageTaken.IsBound())
 		OnDamageTaken.Broadcast(Damage, DamageCauser);
 
-	//if (CurrentHealth > 0.0f)
-	//	return;
+	if (CurrentHealth > 0.0f)
+		return;
 
 	if (OnDeath.IsBound())
 		OnDeath.Broadcast(DamageCauser);

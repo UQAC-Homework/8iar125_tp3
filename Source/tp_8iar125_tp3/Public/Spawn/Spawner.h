@@ -7,7 +7,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpawned, AActor*, Actor);
 
 UCLASS()
-class HEALTHSYSTEM_API ASpawner : public AActor
+class TP_8IAR125_TP3_API ASpawner : public AActor
 {
 	GENERATED_BODY()
 

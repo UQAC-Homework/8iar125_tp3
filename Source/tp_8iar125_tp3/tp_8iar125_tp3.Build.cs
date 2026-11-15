@@ -6,10 +6,6 @@ public class tp_8iar125_tp3 : ModuleRules
 {
 	public tp_8iar125_tp3(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PrivateDependencyModuleNames.AddRange(new string[]
-		{
-			"HealthSystem"
-		});
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[]

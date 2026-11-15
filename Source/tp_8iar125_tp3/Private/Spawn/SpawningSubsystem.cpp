@@ -18,7 +18,16 @@ void USpawningSubsystem::UnregisterSpawner(ASpawner* Spawner)
 
 void USpawningSubsystem::RespawnAs(AController* Controller, const TSubclassOf<APawn> PawnClass)
 {
-	UE_LOG(LogTemp, Warning, TEXT("RespawnAs: %d spawners"), Spawners.Num());
+	if (Spawners.IsEmpty())
+	{
+		UE_LOG(
+			LogTemp,
+			Error,
+			TEXT("No spawner available.")
+		);
+		return;
+	}
 
-	Spawners[0]->Spawn(Controller, PawnClass);
+	const auto Index = FMath::RandRange(0, Spawners.Num() - 1);
+	Spawners[Index]->Spawn(Controller, PawnClass);
 }

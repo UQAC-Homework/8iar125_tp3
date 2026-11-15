@@ -18,7 +18,6 @@ public class tp_8iar125_tp3EditorTarget : TargetRules
 		ExtraModuleNames.AddRange(new string[]
 		{
 			"TeamSystem",
-			"HealthSystem"
 		});
 	}
 }

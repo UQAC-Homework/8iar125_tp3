@@ -35,9 +35,6 @@ ASpawner::ASpawner()
 
 void ASpawner::Spawn(AController* Controller, TSubclassOf<APawn> PawnClass) const
 {
-	UE_LOG(LogTemp, Warning, TEXT("RespawnAs: controller=%s class=%s"),
-	   *GetNameSafe(Controller), *GetNameSafe(PawnClass));
-
 	if (!Controller)
 	{
 		UE_LOG(
@@ -102,6 +99,4 @@ void ASpawner::Spawn(AController* Controller, TSubclassOf<APawn> PawnClass) cons
 	}
 
 	Controller->Possess(Pawn);
-	UE_LOG(LogTemp, Warning, TEXT("Spawned %s at %s, controller pawn now = %s"),
-	*GetNameSafe(Pawn), *StartLocation.ToString(), *GetNameSafe(Controller->GetPawn()));
 }

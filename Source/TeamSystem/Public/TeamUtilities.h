@@ -1,11 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ETeam.h"
+#include "TeamComponent.h"
+#include "Data/TeamDefinition.h"
+#include "Data/TeamRelationType.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "TeamUtilities.generated.h"
-
-#define TEAM_CATEGORY "Utilities/Team"
 
 UCLASS()
 class TEAMSYSTEM_API UTeamUtilities : public UBlueprintFunctionLibrary
@@ -13,11 +13,23 @@ class TEAMSYSTEM_API UTeamUtilities : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	/// Gets the team of the given actor
-	UFUNCTION(BlueprintPure, Category=TEAM_CATEGORY)
-	static ETeam GetTeam(const AActor* InActor);
+	/// Gets the team component of the given actor
+	UFUNCTION(BlueprintPure, Category="Team", meta=(DefaultToSelf="InActor"))
+	static UTeamComponent* GetTeamComponent(const AActor* InActor);
 
-	/// Filters all actors that are not on the given team
-	UFUNCTION(BlueprintPure, Category=TEAM_CATEGORY, meta = (DeterminesOutputType = "InActors"))
-	static TArray<AActor*> KeepOnlyTeam(const TArray<AActor*>& InActors, ETeam TargetTeam);
+	/// Gets the team of the given actor
+	UFUNCTION(BlueprintPure, Category="Team", meta=(DefaultToSelf="InActor"))
+	static UTeamDefinition* GetTeam(const AActor* InActor);
+
+	/// Gets the relationship between the given actors
+	UFUNCTION(BlueprintPure, Category="Team", meta=(DefaultToSelf="From"))
+	static ETeamRelationType GetRelationship(const AActor* From, const AActor* To);
+
+	/// Filters the actors that do not have the given relationship with the given viewer
+	UFUNCTION(BlueprintPure, Category="Team", meta=(DeterminesOutputType="InActors", DefaultToSelf="Viewer"))
+	static TArray<AActor*> KeepOnlyRelationship(
+		const TArray<AActor*>& InActors,
+		const AActor* Viewer,
+		ETeamRelationType Type
+	);
 };
