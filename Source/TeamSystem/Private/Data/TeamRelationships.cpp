@@ -5,9 +5,6 @@ ETeamRelationType UTeamRelationships::GetRelationship(const UTeamDefinition* A, 
 	if (!A || !B)
 		return ETeamRelationType::Neutral;
 
-	if (A == B)
-		return ETeamRelationType::Ally;
-
 	// ReSharper disable once CppUseStructuredBinding
 	for (const auto& Relation : RelationshipOverrides)
 	{

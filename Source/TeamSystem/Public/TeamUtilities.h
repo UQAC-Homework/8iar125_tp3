@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ETeam.h"
 #include "Data/TeamDefinition.h"
 #include "Data/TeamRelationType.h"
 #include "Kismet/BlueprintFunctionLibrary.h"

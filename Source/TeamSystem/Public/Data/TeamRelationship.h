@@ -5,6 +5,7 @@
 #include "TeamDefinition.h"
 #include "TeamRelationship.generated.h"
 
+/// Defines a relationship between two teams
 USTRUCT(BlueprintType)
 struct TEAMSYSTEM_API FTeamRelationship
 {

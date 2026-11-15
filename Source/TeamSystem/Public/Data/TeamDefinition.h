@@ -4,7 +4,7 @@
 #include "Engine/DataAsset.h"
 #include "TeamDefinition.generated.h"
 
-/// Defines the unique properties of a team
+/// Defines the properties of a team
 UCLASS(BlueprintType)
 class TEAMSYSTEM_API UTeamDefinition : public UPrimaryDataAsset
 {
