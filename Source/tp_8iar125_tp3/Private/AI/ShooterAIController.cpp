@@ -11,22 +11,21 @@
 
 void AShooterAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus const Stimulus)
 {
-	const auto Pawn = GetPawn();
+	const auto ActorPawn = GetPawn();
 
-	if (!Pawn)
+	if (!ActorPawn)
 		return;
 
 	const AShooterCharacter* ShootCharacter = Cast<AShooterCharacter>(Actor);
 
 	if (!ShootCharacter)
 		return;
+	
+	const auto Relationship = UTeamUtilities::GetRelationship(ActorPawn, Actor);
 
-	const auto SelfTeam = UTeamUtilities::GetTeam(Pawn);
-	const auto OtherTeam = UTeamUtilities::GetTeam(Actor);
-
-	if (SelfTeam == OtherTeam)
+	if (Relationship == ETeamRelationType::Ally)
 		return;
-
+	
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
 
 	if (!BlackboardComponent)
@@ -110,4 +109,12 @@ void AShooterAIController::OnPossess(APawn* InPawn)
 
 	if (TreeAsset)
 		RunBehaviorTree(TreeAsset);
+	
+	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
+	
+	if (!BlackboardComponent)
+		return;
+	
+	BlackboardComponent->SetValueAsObject("Target", nullptr);
+	SetState(EAIState::Explore);
 }

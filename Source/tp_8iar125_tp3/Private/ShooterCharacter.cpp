@@ -31,11 +31,11 @@ void AShooterCharacter::OnFireHit(FVector ImpactPoint, AActor* Actor)
 
 void AShooterCharacter::HandleDeath(AActor* Source)
 {
-	AController* Controller = GetController();
+	AController* ActorController = GetController();
 	TSubclassOf<APawn> PawnClass = GetClass();
 
-	if (Controller)
-		Controller->UnPossess();
+	if (ActorController)
+		ActorController->UnPossess();
 
 	const auto World = GetWorld();
 	check(World);
@@ -43,7 +43,7 @@ void AShooterCharacter::HandleDeath(AActor* Source)
 	const auto GameMode = Cast<AShooterGameMode>(World->GetAuthGameMode());
 
 	if (GameMode)
-		GameMode->HandleDeath(Controller, PawnClass);
+		GameMode->HandleDeath(ActorController, PawnClass);
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
